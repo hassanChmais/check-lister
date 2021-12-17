@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+class Task extends Model implements HasMedia
+{
+    use HasFactory,SoftDeletes,InteractsWithMedia;
+    protected $fillable=['checklist_id',
+                         'name',
+                         'description',
+                         'position',
+                         'user_id',
+                         'task_id',
+                         'completed_at',
+                         'added_to_my_day_at',
+                         'is_important',
+                         'due_date',
+                         'note',
+                         'reminder_at',
+                        ];
+    protected $dates = [
+        'due_date',
+        'reminder_at',
+    ];
+
+
+    public function checklist()
+    {
+        return $this->belongsTo(Checklist::class);
+    }
+        public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(600);
+    }
+
+}
